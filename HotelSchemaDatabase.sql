@@ -247,3 +247,59 @@ alter table Room
         references Guest(GuestID);
 
 select * from Room;
+
+select 
+	Room.RoomNumberID,
+    RoomType.RoomType,
+    Amenities.Amenity
+from Room 
+inner join RoomType on Room.RoomTypeID = RoomType.RoomTypeID
+inner join Amenities on RoomType.RoomTypeId = Amenities.RoomTypeId;
+
+-- I need to find out how to print the number of amenities in one line, i think
+-- I need a many-to-many bridge table between Amenities and Room or RoomType to work this out
+-- also need to calculate total cost of the room with join scripts using IFNULL() function
+-- Now I can generate the same exact tables thats given on the exercise
+
+select 
+	r.ReservationID,
+    g.Name,
+    r.RoomNumberID,
+    r.StartDate,
+    r.EndDate
+from Reservation r
+inner join Guest g on r.GuestID = g.GuestID
+where r.EndDate between '2023-07-01' and '2023-07-31';
+
+select
+	g.Name,
+    r.RoomNumberID,
+    r.StartDate,
+    r.EndDate,
+    a.Amenity
+from Guest g
+inner join Reservation r on g.GuestID = r.GuestID
+inner join Room rm on r.RoomNumberID = rm.RoomNumberID
+inner join RoomType rt on rm.RoomTypeID = rt.RoomTypeID
+inner join Amenities a on rt.RoomTypeID = a.RoomTypeID
+where a.Amenity = 'Jacuzzi';
+
+
+select
+	g.Name, 
+    r.ReservationID,
+    r.RoomNumberID,
+    r.StartDate,
+    r.Adults
+from Guest g
+inner join Reservation r on g.GuestID = r.GuestID and g.Name = 'Mack Simmer';
+
+
+select 
+	Room.RoomNumberID,
+    Reservation.ReservationID,
+    Reservation.TotalRoomCost
+from Room 
+left outer join Reservation on Room.RoomNumberID = Reservation.RoomNumberID;
+
+
